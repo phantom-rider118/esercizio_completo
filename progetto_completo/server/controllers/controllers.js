@@ -16,7 +16,7 @@ export const registrazione = (req, res) => {
     [name, cognome, dataNascita, email, password],
     function (err) {
       if (err) {
-        res.status(500).send(`si è verificato un errore`);
+        res.status(500).send(`errore nella registrazione`);
       }
       res
         .status(201)
