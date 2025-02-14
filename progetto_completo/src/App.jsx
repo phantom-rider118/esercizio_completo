@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import { Registrazione } from "./componenti/registrazione";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -32,6 +33,7 @@ function App() {
           <hr />
         </div>
       ))}
+      <Registrazione/>
     </>
   );
 }

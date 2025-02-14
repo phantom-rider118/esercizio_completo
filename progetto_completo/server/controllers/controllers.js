@@ -10,17 +10,20 @@ export const getAllUsers = (req, res) => {
 };
 
 export const registrazione = (req, res) => {
-  const { name, cognome, dataNascita, email, password } = req.body;
+  const { nome, cognome, dataNascita, email, password } = req.body;
   db.run(
-    `INSERT INTO users(nome, cognome, data_nascita, email, password) VALUES(?,?,?,?,?)`,
-    [name, cognome, dataNascita, email, password],
+    `INSERT INTO users (nome, cognome, data_nascita, email, password) VALUES (?,?,?,?,?)`,
+    [nome, cognome, dataNascita, email, password],
     function (err) {
       if (err) {
-        res.status(500).send(`errore nella registrazione`);
+        if (err.message.includes("UNIQUE constraint failed")) {
+          return res.status(400).send("Email già registrata");
+        }
+        res.status(500).send("Errore nella registrazione");
       }
       res
         .status(201)
-        .json({ id: this.lastID, name, cognome, dataNascita, email, password });
+        .json({ id: this.lastID, nome, cognome, dataNascita, email, password });
     }
   );
 };

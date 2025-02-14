@@ -2,82 +2,121 @@ import { useState } from "react";
 
 export function Registrazione() {
   const [data, setData] = useState({
-    name: "",
+    nome: "",
     cognome: "",
     dataNascita: "",
     email: "",
     password: "",
   });
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (event) => {
-    setData({
-      ...data,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+    setData({ ...data, [name]: value });
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
+    setMessage("");
+
     try {
       const response = await fetch("http://localhost:5000/users", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      if (!response.ok) {
-        const error = await response.json();
-        setMessage(`Registrazione fallita : ${error}`);
+
+      let responseData;
+      try {
+        responseData = await response.json();
+      } catch {
+        throw new Error("Risposta non valida dal server.");
       }
-      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          responseData.message || "Errore durante la registrazione."
+        );
+      }
+
       setMessage("Registrazione effettuata con successo");
+      setData({
+        nome: "",
+        cognome: "",
+        dataNascita: "",
+        email: "",
+        password: "",
+      });
+      
     } catch (error) {
-      setMessage(error.message);
+      setMessage(`Registrazione fallita: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div>
+    <>
       <form onSubmit={handleSubmit}>
+        <label htmlFor="nome">Nome:</label>
         <input
           type="text"
           name="nome"
           id="nome"
-          value={data.name}
           onChange={handleChange}
+          value={data.nome}
+          required
         />
+
+        <label htmlFor="cognome">Cognome:</label>
         <input
           type="text"
           name="cognome"
           id="cognome"
-          value={data.cognome}
           onChange={handleChange}
+          value={data.cognome}
+          required
         />
+
+        <label htmlFor="dataNascita">Data di nascita:</label>
         <input
           type="date"
           name="dataNascita"
           id="dataNascita"
-          value={data.dataNascita}
           onChange={handleChange}
+          value={data.dataNascita}
+          required
         />
+
+        <label htmlFor="email">Email:</label>
         <input
           type="email"
           name="email"
           id="email"
-          value={data.email}
           onChange={handleChange}
+          value={data.email}
+          required
         />
+
+        <label htmlFor="password">Password:</label>
         <input
           type="password"
           name="password"
-          value={data.password}
-          id="passsword"
+          id="password"
           onChange={handleChange}
+          value={data.password}
+          required
+          minLength={6}
         />
-        <button type="submit">Invia</button>
+
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Invio..." : "Invia"}
+        </button>
       </form>
+
       {message && <p>{message}</p>}
-    </div>
+    </>
   );
 }
