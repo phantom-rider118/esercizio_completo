@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export function Registrazione() {
+export function RegistrationForm() {
   const [data, setData] = useState({
     nome: "",
     cognome: "",
@@ -9,7 +9,7 @@ export function Registrazione() {
     password: "",
   });
   const [message, setMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -18,7 +18,7 @@ export function Registrazione() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
     setMessage("");
 
     try {
@@ -31,8 +31,8 @@ export function Registrazione() {
       let responseData;
       try {
         responseData = await response.json();
-      } catch {
-        throw new Error("Risposta non valida dal server.");
+      } catch (error) {
+        throw new Error(error.message);
       }
 
       if (!response.ok) {
@@ -48,13 +48,13 @@ export function Registrazione() {
         dataNascita: "",
         email: "",
         password: "",
-      });
-      
+      }); // Reset campi
     } catch (error) {
       setMessage(`Registrazione fallita: ${error.message}`);
-    } finally {
-      setIsLoading(false);
-    }
+    } 
+    // finally {
+    //   setIsLoading(false);
+    // }
   };
 
   return (
@@ -111,9 +111,7 @@ export function Registrazione() {
           minLength={6}
         />
 
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Invio..." : "Invia"}
-        </button>
+        <button type="submit">Invia</button>
       </form>
 
       {message && <p>{message}</p>}

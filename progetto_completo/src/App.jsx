@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Registrazione } from "./componenti/registrazione";
+import { Login } from "./componenti/Login";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -19,10 +20,11 @@ function App() {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [users]);
 
   return (
     <>
+    <Login/>
       {users.map((user) => (
         <div key={user.id}>
           <img src={user.img ? user.img : "https://placehold.co/40"} />
