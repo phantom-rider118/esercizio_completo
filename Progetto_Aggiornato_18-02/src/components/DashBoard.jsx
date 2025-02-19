@@ -1,14 +1,18 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function DashBoard({ loggedInfo }) {
   const [modify, setModify] = useState(false);
   const [newUser, setNewUser] = useState({
     nome: loggedInfo.nome,
     cognome: loggedInfo.cognome,
-    dataNascita: loggedInfo.dataNascita,
+    dataNascita: loggedInfo.data_nascita,
   });
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    console.log(newUser);
+  }, []);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
