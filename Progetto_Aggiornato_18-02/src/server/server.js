@@ -1,5 +1,7 @@
+/* eslint-disable no-undef */
 import express, { json } from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 // import multer from "multer";
 import {
   getAllUsers,
@@ -8,8 +10,10 @@ import {
   updateInfo,
 } from "./controllers/controllers.js";
 
+dotenv.config();
+
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT;
 
 //middleware
 app.use(cors());
