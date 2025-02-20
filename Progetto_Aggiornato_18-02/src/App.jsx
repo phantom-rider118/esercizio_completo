@@ -5,10 +5,11 @@ import { Login } from "./components/Login";
 
 function App() {
   const [users, setUsers] = useState([]);
+  const PORT = import.meta.env.PORT
 
   async function fetchUsers() {
     try {
-      const response = await fetch("http://localhost:5000/users");
+      const response = await fetch(`http://localhost:${PORT}/users`);
       if (response.ok) {
         const data = await response.json();
         setUsers(data);
